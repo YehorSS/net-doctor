@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+  <title>NET DOCTOR</title>
+  <style>/* APP_STYLES */</style>
+</head>
+<body>
+  <div id="boot" aria-hidden="true" hidden>
+    <pre id="skull">/* APP_SKULL */</pre>
+    <span data-string="boot">Запуск NET DOCTOR</span>
+  </div>
+  <main id="app">
+    <header class="bar">
+      <div class="wordmark"><i aria-hidden="true"></i>NET DOCTOR</div>
+      <div class="languages" role="group" aria-label="Язык" data-aria="language">
+        <button type="button" data-language="ru" aria-label="Русский" aria-pressed="true">RU</button>
+        <button type="button" data-language="en" aria-label="English" aria-pressed="false">EN</button>
+      </div>
+    </header>
+    <div class="intro">
+      <div class="intro-copy">
+        <h1 data-string="subtitle">Проверка сети</h1>
+        <p data-string="intro">Роутер, интернет и задержка под нагрузкой.</p>
+        <div class="actions">
+          <button type="button" data-job="improve" class="primary" data-string="improve" data-title="improveHint">Улучшить соединение</button>
+          <button type="button" data-job="full" data-title="traffic">Найти причину</button>
+          <button type="button" data-job="speed" data-string="speed" data-title="traffic">Тест скорости</button>
+        </div>
+      </div>
+      <canvas id="signal" width="420" height="160" aria-hidden="true"></canvas>
+    </div>
+    <section class="run" aria-labelledby="run-title">
+      <h2 id="run-title" class="sr-only" data-string="runTitle">Ход проверки</h2>
+      <ol id="stages" class="stages" hidden></ol>
+      <div class="status" role="status"><i id="indicator" aria-hidden="true"></i><span id="status">Готово к проверке.</span></div>
+      <button type="button" data-job="restoreWifi" class="quiet" data-string="restoreWifi" hidden>Вернуть режим питания Wi-Fi</button>
+    </section>
+    <div class="readouts">
+      <section aria-labelledby="latency-title">
+        <h2 id="latency-title" data-string="latency">Задержка</h2>
+        <dl class="rows">
+          <div><dt><span data-string="gateway">До роутера</span> <small id="gateway-address"></small></dt><dd><strong id="gateway">—</strong><small id="gateway-loss"></small></dd></div>
+          <div><dt><span data-string="idlePing">До интернета в простое</span> <small>1.1.1.1</small></dt><dd><strong id="ping">—</strong><small id="loss"></small></dd></div>
+          <div><dt data-string="downPing">При скачивании</dt><dd><strong id="down-ping">—</strong></dd></div>
+          <div><dt data-string="upPing">При отдаче</dt><dd><strong id="up-ping">—</strong></dd></div>
+        </dl>
+      </section>
+      <section aria-labelledby="speed-title">
+        <h2 id="speed-title" data-string="throughput">Скорость</h2>
+        <dl class="rows">
+          <div><dt data-string="download">Скачивание</dt><dd><strong id="download">—</strong></dd></div>
+          <div><dt data-string="upload">Отдача</dt><dd><strong id="upload">—</strong></dd></div>
+        </dl>
+        <p id="speed-note" class="note" hidden></p>
+      </section>
+    </div>
+    <section id="comparison" class="comparison" aria-labelledby="comparison-title" hidden>
+      <header>
+        <h2 id="comparison-title" data-string="comparison">До и после</h2>
+        <button type="button" id="save-baseline" class="quiet" data-string="saveBaseline" hidden>Взять последний замер за «до»</button>
+      </header>
+      <p id="comparison-note" class="note"></p>
+      <table>
+        <thead><tr><th scope="col" data-string="metrics">Показатель</th><th scope="col" data-string="before">До</th><th scope="col" data-string="after">После</th><th scope="col" data-string="change">Разница</th></tr></thead>
+        <tbody id="comparison-rows"></tbody>
+      </table>
+    </section>
+    <div class="tools">
+      <details id="check-details">
+        <summary data-string="checks">Доступность сети</summary>
+        <dl class="rows">
+          <div><dt data-string="ip">Доступ по IPv4</dt><dd id="ip">—</dd></div>
+          <div><dt data-string="dns">Разрешение DNS</dt><dd id="dns">—</dd></div>
+          <div><dt data-string="https">Ответ HTTPS</dt><dd id="https">—</dd></div>
+        </dl>
+        <button type="button" class="quiet" data-job="diagnose" data-string="diagnose">Быстрая проверка</button>
+      </details>
+      <details id="dns-details">
+        <summary data-string="repairTitle">Инструменты DNS</summary>
+        <div class="actions">
+          <button type="button" data-job="optimize" data-string="optimize">Сравнить DNS</button>
+          <button type="button" data-job="repair" data-string="repair" data-title="repairHint">Очистить кэш</button>
+        </div>
+        <p id="benchmark"></p>
+        <div class="actions">
+          <button type="button" data-job="apply" data-string="apply" hidden>Применить Cloudflare DNS</button>
+          <button type="button" data-job="restore" data-string="restore" hidden>Вернуть автоматический DNS</button>
+        </div>
+      </details>
+    </div>
+  </main>
+  <script>/* APP_STRINGS */</script>
+  <script>/* APP_SCRIPT */</script>
+</body>
+</html>
