@@ -1,5 +1,6 @@
 const strings = {
   ru: {
+    scrollbar: "Прокрутка окна",
     boot: "Запуск NET DOCTOR", language: "Язык", subtitle: "Проверка сети",
     intro: "Роутер, интернет и задержка под нагрузкой.", runTitle: "Ход проверки",
     full: "Найти причину", repeat: "Повторить и сравнить",
@@ -79,6 +80,7 @@ const strings = {
     Invalid: "Сервер вернул некорректные данные измерения.", Incomplete: "Передача тестовых данных не завершилась.",
   },
   en: {
+    scrollbar: "Window scroll",
     boot: "Starting NET DOCTOR", language: "Language", subtitle: "Network check",
     intro: "Check your router, internet, and latency under load.", runTitle: "Test progress",
     full: "Find the cause", repeat: "Retest and compare",

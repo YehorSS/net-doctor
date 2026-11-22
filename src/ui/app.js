@@ -344,5 +344,72 @@ function boot() {
   byId("boot").addEventListener("click", () => { clearTimeout(timer); finish(); }, { once: true });
 }
 
+function setupScrollbar() {
+  const page = document.scrollingElement;
+  const rail = byId("app-scrollbar");
+  const thumb = byId("scroll-thumb");
+  let maximum = 0;
+  let travel = 0;
+  let grab;
+
+  function syncPosition() {
+    const ratio = maximum ? Math.min(1, Math.max(0, page.scrollTop / maximum)) : 0;
+    thumb.style.transform = `translateY(${ratio * travel}px)`;
+    rail.setAttribute("aria-valuenow", Math.round(ratio * 100));
+  }
+
+  function syncSize() {
+    maximum = Math.max(0, page.scrollHeight - page.clientHeight);
+    rail.hidden = maximum <= 1;
+    if (rail.hidden) return;
+    const height = rail.clientHeight;
+    const thumbHeight = Math.min(height, Math.max(32, height * page.clientHeight / page.scrollHeight));
+    thumb.style.height = `${thumbHeight}px`;
+    travel = height - thumbHeight;
+    syncPosition();
+  }
+
+  function scrollToPointer(clientY) {
+    if (travel <= 0) return;
+    const railTop = rail.getBoundingClientRect().top + rail.clientTop;
+    const offset = Math.max(0, Math.min(travel, clientY - railTop - grab));
+    page.scrollTop = offset / travel * maximum;
+  }
+
+  rail.addEventListener("pointerdown", event => {
+    if (!event.isPrimary || event.button !== 0) return;
+    event.preventDefault();
+    rail.focus({ preventScroll: true });
+    const bounds = thumb.getBoundingClientRect();
+    grab = event.target === thumb ? event.clientY - bounds.top : bounds.height / 2;
+    rail.setPointerCapture(event.pointerId);
+    rail.dataset.dragging = "";
+    if (event.target !== thumb) scrollToPointer(event.clientY);
+  });
+  rail.addEventListener("pointermove", event => {
+    if (grab !== undefined && rail.hasPointerCapture(event.pointerId)) scrollToPointer(event.clientY);
+  });
+  rail.addEventListener("lostpointercapture", () => {
+    grab = undefined;
+    delete rail.dataset.dragging;
+  });
+  rail.addEventListener("keydown", event => {
+    const steps = {
+      ArrowUp: -40, ArrowDown: 40,
+      PageUp: -page.clientHeight, PageDown: page.clientHeight,
+      Home: -maximum, End: maximum,
+    };
+    if (!Object.hasOwn(steps, event.key)) return;
+    event.preventDefault();
+    page.scrollTop += steps[event.key];
+  });
+  page.classList.add("app-scroll");
+  window.addEventListener("scroll", syncPosition, { passive: true });
+  window.addEventListener("resize", syncSize);
+  new ResizeObserver(syncSize).observe(byId("app"));
+  syncSize();
+}
+
 render();
+setupScrollbar();
 boot();

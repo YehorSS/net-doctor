@@ -12,9 +12,50 @@
   color: var(--text);
 }
 * { box-sizing: border-box; }
+html {
+  overflow-y: auto;
+  scroll-padding-block: 12px;
+}
+html.app-scroll { scrollbar-width: none; }
+html.app-scroll::-webkit-scrollbar { display: none; }
+#app-scrollbar {
+  position: fixed;
+  z-index: 1;
+  inset: 12px 6px 12px auto;
+  width: 17px;
+  border: 1px solid #3b503e;
+  background: #161f18;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+}
+#app-scrollbar:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+#boot:not([hidden]) ~ #app-scrollbar { visibility: hidden; }
+#scroll-thumb {
+  position: absolute;
+  inset: 0 2px auto;
+  background: var(--lime);
+  border-block: 2px solid #e1ffa9;
+  cursor: grab;
+}
+#scroll-thumb::after {
+  content: "";
+  position: absolute;
+  inset: 50% 2px auto;
+  height: 5px;
+  translate: 0 -50%;
+  border-block: 1px solid #25371a;
+  background: linear-gradient(#25371a, #25371a) center / 100% 1px no-repeat;
+}
+#app-scrollbar[data-dragging] #scroll-thumb { cursor: grabbing; background: #e1ffa9; }
+@media (forced-colors: active) {
+  #app-scrollbar { border-color: ButtonText; background: Canvas; }
+  #scroll-thumb, #app-scrollbar[data-dragging] #scroll-thumb { background: Highlight; }
+}
 [hidden] { display: none !important; }
 body, h1, h2, p, dl, dd, pre { margin: 0; }
 main { max-width: 1210px; margin-inline: auto; padding-inline: clamp(21px, 4.8vw, 60px); padding-bottom: 32px; }
+html.app-scroll main { padding-right: max(29px, clamp(21px, 4.8vw, 60px)); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .bar, .comparison header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .bar { min-height: 60px; border-bottom: 1px solid var(--line); }
